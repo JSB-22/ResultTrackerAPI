@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using ResultTracker.API.Data;
+
 namespace ResultTracker.API
 {
 	public class Program
@@ -14,7 +17,17 @@ namespace ResultTracker.API
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.AddDbContext<ResultTrackerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ResultTrackerConnectionString")));
+
 			var app = builder.Build();
+
+			#region Injection of SeedData:
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				SeedData.Initialise(services);
+			}
+			#endregion
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
