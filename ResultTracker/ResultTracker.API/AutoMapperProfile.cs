@@ -10,6 +10,8 @@ namespace ResultTracker.API
         {
             CreateMap<TopicDto, Topic>().ReverseMap();
             CreateMap<AddTopicRequestDto, Topic>().ReverseMap();
+            CreateMap<SubjectDto, Subject>().ReverseMap();
+            CreateMap<AddSubjectRequestDto, Subject>().ReverseMap();
         }
     }
 }

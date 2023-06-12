@@ -24,6 +24,7 @@ namespace ResultTracker.API
 			builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 			builder.Services.AddScoped<ITopicRepository, SQLTopicRepository>();
+			builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
 
 			var app = builder.Build();
 
