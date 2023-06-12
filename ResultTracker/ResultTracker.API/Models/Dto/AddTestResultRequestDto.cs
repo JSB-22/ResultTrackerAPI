@@ -7,6 +7,6 @@ namespace ResultTracker.API.Models.Dto
 		public string? Notes { get; set; }
 		public int PercentageResult { get; set; }
 		public Guid SubjectId { get; set; }
-		public Guid TopicID { get; set; }
+		public Guid TopicId { get; set; }
 	}
 }

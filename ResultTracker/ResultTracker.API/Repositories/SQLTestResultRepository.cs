@@ -1,4 +1,5 @@
-﻿using ResultTracker.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ResultTracker.API.Data;
 using ResultTracker.API.Models.Domain;
 using ResultTracker.API.Repositories.Interfaces;
 
@@ -30,9 +31,9 @@ namespace ResultTracker.API.Repositories
 			throw new NotImplementedException();
 		}
 
-		public Task<TestResult?> GetByIdAsync(Guid id)
+		public async Task<TestResult?> GetByIdAsync(Guid id)
 		{
-			throw new NotImplementedException();
+			return await _context.Results.Include(r => r.Subject).Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == id);
 		}
 
 		public Task<TestResult?> UpdateAsync(Guid id, TestResult result)

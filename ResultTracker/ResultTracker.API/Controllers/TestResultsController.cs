@@ -27,5 +27,13 @@ namespace ResultTracker.API.Controllers
 			var createdTestResult = await _repository.CreateAsync(domainModelTestResult);
 			return Ok(_mapper.Map<TestResultDto>(createdTestResult));
 		}
+		[HttpGet]
+		[Route("{id:Guid}")]
+		public async Task<IActionResult> GetById(Guid id)
+		{
+			var testResultDomainModel = await _repository.GetByIdAsync(id);
+			if (testResultDomainModel == null) return NotFound();
+			return Ok(_mapper.Map<TestResultDto>(testResultDomainModel));
+		}
 	}
 }
