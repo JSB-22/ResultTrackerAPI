@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using ResultTracker.API.Data;
+using ResultTracker.API.Repositories;
+using ResultTracker.API.Repositories.Interfaces;
 
 namespace ResultTracker.API
 {
@@ -18,6 +20,10 @@ namespace ResultTracker.API
 			builder.Services.AddSwaggerGen();
 
 			builder.Services.AddDbContext<ResultTrackerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ResultTrackerConnectionString")));
+
+			builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+			builder.Services.AddScoped<ITopicRepository, SQLTopicRepository>();
 
 			var app = builder.Build();
 
