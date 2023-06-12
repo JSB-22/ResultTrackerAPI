@@ -25,6 +25,7 @@ namespace ResultTracker.API
 
 			builder.Services.AddScoped<ITopicRepository, SQLTopicRepository>();
 			builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
+			builder.Services.AddScoped<ITestResultRepository, SQLTestResultRepository>();
 
 			var app = builder.Build();
 

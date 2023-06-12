@@ -8,7 +8,7 @@ namespace ResultTracker.API.Data
         public ResultTrackerDbContext(DbContextOptions options) : base(options)
         {
         }
-		public DbSet<Result> Results { get; set; }
+		public DbSet<TestResult> Results { get; set; }
 		public DbSet<Subject> Subjects { get; set; }
 		public DbSet<Topic> Topics { get; set; }
 	}

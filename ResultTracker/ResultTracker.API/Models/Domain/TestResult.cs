@@ -2,7 +2,7 @@
 
 namespace ResultTracker.API.Models.Domain
 {
-	public class Result
+	public class TestResult
 	{
         public Guid Id { get; set; }
         public string? Notes { get; set; }
