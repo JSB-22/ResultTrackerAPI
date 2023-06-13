@@ -17,6 +17,17 @@ namespace ResultTracker.API.Data
 			Subject testSubject = new Subject() { Id = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"), ExamBoard = "AQA", Name = "Foundation Mathematics" };
 			context.Subjects.Add(testSubject);
 
+			TestResult testResult = new TestResult()
+			{
+				Id = Guid.Parse("7e789338-26cc-4cd4-8b78-97e648e8092c"),
+				Notes = "You bad at math",
+				PercentageResult = 17,
+				Topic = testTopic,
+				Subject = testSubject
+				
+			};
+			context.Results.Add(testResult);
+
 			context.SaveChanges();
 		}
 	}
