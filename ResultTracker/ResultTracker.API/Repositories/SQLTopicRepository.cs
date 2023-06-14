@@ -39,5 +39,15 @@ namespace ResultTracker.API.Repositories
 		{
 			return await _context.Topics.FirstOrDefaultAsync(t => t.Id == id);
 		}
+
+		public async Task<Topic?> UpdateTopicAsync(Guid id, Topic topic)
+		{
+			var existingTopic = await _context.Topics.FirstOrDefaultAsync(t => t.Id == id);
+			if (existingTopic == null) return null;
+			existingTopic.Name = topic.Name;
+			existingTopic.Year = topic.Year;
+			await _context.SaveChangesAsync();
+			return existingTopic;
+		}
 	}
 }

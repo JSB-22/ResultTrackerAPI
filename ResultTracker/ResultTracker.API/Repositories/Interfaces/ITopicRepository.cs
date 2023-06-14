@@ -8,6 +8,7 @@ namespace ResultTracker.API.Repositories.Interfaces
 		public Task<Topic?> GetByIdAsync(Guid id);
 		public Task<Topic?> CreateTopicAsync(Topic topic);
 		public Task<Topic?> DeleteTopicAsync(Guid id);
+		public Task<Topic?> UpdateTopicAsync(Guid id, Topic topic);
 
 	}
 }

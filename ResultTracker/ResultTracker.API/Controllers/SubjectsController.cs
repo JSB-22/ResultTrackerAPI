@@ -48,5 +48,13 @@ namespace ResultTracker.API.Controllers
 			var createdSubjectDto = _mapper.Map<SubjectDto>(createdSubject);
 			return CreatedAtAction(nameof(GetById), new { id = createdSubjectDto.Id }, createdSubjectDto);
 		}
+		[HttpPut]
+		[Route("{id:Guid}")]
+		public async Task<IActionResult> Update(Guid id, UpdateSubjectRequestDto updateSubjectRequestDto)
+		{
+			var existingSubject = await _repository.UpdateSubjectAsync(id, _mapper.Map<Subject>(updateSubjectRequestDto));
+			if (existingSubject == null) return null;
+			return Ok(_mapper.Map<SubjectDto>(existingSubject));
+		}
 	}
 }
