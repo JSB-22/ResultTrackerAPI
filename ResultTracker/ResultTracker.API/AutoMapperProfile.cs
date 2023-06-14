@@ -8,9 +8,9 @@ namespace ResultTracker.API
 	{
         public AutoMapperProfile()
         {
-            CreateMap<TopicDto, Topic>().ReverseMap();
+            CreateMap<TopicDto, Topic>().ReverseMap().ForMember(dest=>dest.FullName,opt=>opt.MapFrom(src=>$"Year: {src.Year} - {src.Name}"));
             CreateMap<AddTopicRequestDto, Topic>().ReverseMap();
-            CreateMap<SubjectDto, Subject>().ReverseMap();
+            CreateMap<SubjectDto, Subject>().ReverseMap().ForMember(dest=>dest.FullName,opt=>opt.MapFrom(src=>$"{src.ExamBoard} {src.Name}"));
             CreateMap<AddSubjectRequestDto, Subject>().ReverseMap();
             CreateMap<TestResultDto, TestResult>().ReverseMap();
             CreateMap<AddTestResultRequestDto, TestResult>().ReverseMap();
