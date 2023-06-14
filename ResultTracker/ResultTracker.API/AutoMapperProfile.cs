@@ -14,6 +14,7 @@ namespace ResultTracker.API
             CreateMap<AddSubjectRequestDto, Subject>().ReverseMap();
             CreateMap<TestResultDto, TestResult>().ReverseMap();
             CreateMap<AddTestResultRequestDto, TestResult>().ReverseMap();
+            CreateMap<UpdateTestResultRequestDto, TestResult>().ReverseMap();
         }
     }
 }

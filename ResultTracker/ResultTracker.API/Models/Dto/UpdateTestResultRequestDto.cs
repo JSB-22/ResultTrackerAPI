@@ -1,8 +1,6 @@
-﻿using ResultTracker.API.Models.Domain;
-
-namespace ResultTracker.API.Models.Dto
+﻿namespace ResultTracker.API.Models.Dto
 {
-	public class AddTestResultRequestDto
+	public class UpdateTestResultRequestDto
 	{
 		public string? Notes { get; set; }
 		public int PercentageResult { get; set; }

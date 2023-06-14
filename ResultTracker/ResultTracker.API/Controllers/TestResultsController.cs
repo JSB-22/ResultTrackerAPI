@@ -28,12 +28,35 @@ namespace ResultTracker.API.Controllers
 			return Ok(_mapper.Map<TestResultDto>(createdTestResult));
 		}
 		[HttpGet]
+		public async Task<IActionResult> GetAllTestResults(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+		{
+			var testResultsDomaimModel = await _repository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
+			return Ok(testResultsDomaimModel.Select(tr => _mapper.Map<TestResultDto>(tr)));
+		}
+		[HttpGet]
 		[Route("{id:Guid}")]
 		public async Task<IActionResult> GetById(Guid id)
 		{
 			var testResultDomainModel = await _repository.GetByIdAsync(id);
 			if (testResultDomainModel == null) return NotFound();
 			return Ok(_mapper.Map<TestResultDto>(testResultDomainModel));
+		}
+		[HttpPut]
+		[Route("{id:Guid}")]
+		public async Task<IActionResult> Update(Guid id, UpdateTestResultRequestDto updateTestResultRequestDto)
+		{
+			var testResultDomainModel = _mapper.Map<TestResult>(updateTestResultRequestDto);
+			testResultDomainModel = await _repository.UpdateAsync(id, testResultDomainModel);
+			if (testResultDomainModel == null) return NotFound();
+			return Ok(_mapper.Map<TestResultDto>(testResultDomainModel));
+		}
+		[HttpDelete]
+		[Route("{id:Guid}")]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			var testResultToDelete = await _repository.DeleteAsync(id);
+			if (testResultToDelete == null) return NotFound();
+			return Ok(_mapper.Map<TestResultDto>(testResultToDelete));
 		}
 	}
 }
