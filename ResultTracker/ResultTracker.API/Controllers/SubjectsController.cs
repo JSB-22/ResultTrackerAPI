@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResultTracker.API.Models.Domain;
@@ -9,6 +10,7 @@ namespace ResultTracker.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Teacher, Admin")]
 	public class SubjectsController : ControllerBase
 	{
 		private readonly ISubjectRepository _repository;

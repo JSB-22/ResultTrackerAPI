@@ -5,7 +5,7 @@ namespace ResultTracker.API.Data
 {
 	public class ResultTrackerDbContext : DbContext
 	{
-        public ResultTrackerDbContext(DbContextOptions options) : base(options)
+        public ResultTrackerDbContext(DbContextOptions<ResultTrackerDbContext> options) : base(options)
         {
         }
 		public DbSet<TestResult> Results { get; set; }
