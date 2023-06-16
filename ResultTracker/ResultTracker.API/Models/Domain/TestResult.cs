@@ -1,4 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using ResultTracker.API.Users.Domain;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ResultTracker.API.Models.Domain
 {
@@ -11,6 +14,8 @@ namespace ResultTracker.API.Models.Domain
 		public Guid TopicId { get; set; }
 		public Topic Topic { get; set; }
 		public Subject Subject { get; set; }
+		public string StudentId { get; set; } = "";
+		public Account StudentAccount { get; set; }
 
     }
 }

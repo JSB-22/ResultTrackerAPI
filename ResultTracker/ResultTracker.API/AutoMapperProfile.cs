@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ResultTracker.API.Models.Domain;
 using ResultTracker.API.Models.Dto;
+using ResultTracker.API.Users;
+using ResultTracker.API.Users.Domain;
 
 namespace ResultTracker.API
 {
@@ -17,6 +19,10 @@ namespace ResultTracker.API
             CreateMap<TestResultDto, TestResult>().ReverseMap();
             CreateMap<AddTestResultRequestDto, TestResult>().ReverseMap();
             CreateMap<UpdateTestResultRequestDto, TestResult>().ReverseMap();
+
+            CreateMap<AccountDto,Account>().ReverseMap()
+                .ForMember(dest=>dest.StudentName,opt=>opt.MapFrom(src=>src.FullName))
+                .ForMember(dest=>dest.TeacherName,opt=>opt.MapFrom(src=>src.Teacher.FullName));
         }
     }
 }
