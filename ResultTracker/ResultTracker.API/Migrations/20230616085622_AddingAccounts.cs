@@ -5,14 +5,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
+namespace ResultTracker.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatingAuthDatabase : Migration
+    public partial class AddingAccounts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Results_Topics_TopicID",
+                table: "Results");
+
+            migrationBuilder.RenameColumn(
+                name: "TopicID",
+                table: "Results",
+                newName: "TopicId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Results_TopicID",
+                table: "Results",
+                newName: "IX_Results_TopicId");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -208,11 +222,23 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Results_Topics_TopicId",
+                table: "Results",
+                column: "TopicId",
+                principalTable: "Topics",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Results_Topics_TopicId",
+                table: "Results");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -233,6 +259,24 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.RenameColumn(
+                name: "TopicId",
+                table: "Results",
+                newName: "TopicID");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_Results_TopicId",
+                table: "Results",
+                newName: "IX_Results_TopicID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Results_Topics_TopicID",
+                table: "Results",
+                column: "TopicID",
+                principalTable: "Topics",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

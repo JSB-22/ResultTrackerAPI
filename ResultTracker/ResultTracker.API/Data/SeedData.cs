@@ -1,4 +1,7 @@
-﻿using ResultTracker.API.Models.Domain;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using ResultTracker.API.Models.Domain;
+using ResultTracker.API.Users.Domain;
 
 namespace ResultTracker.API.Data
 {
@@ -7,13 +10,118 @@ namespace ResultTracker.API.Data
 		public static void Initialise(IServiceProvider serviceProvider)
 		{
 			var context = serviceProvider.GetRequiredService<ResultTrackerDbContext>();
-			if (context.Results.Any()||context.Topics.Any()||context.Subjects.Any())
+			var userManager = serviceProvider.GetRequiredService<UserManager<Account>>();
+			var roleStore = new RoleStore<IdentityRole>(context);
+
+			if (context.Results.Any()||context.Topics.Any()||context.Subjects.Any()||context.Users.Any())
 			{
 				context.Results.RemoveRange(context.Results);
 				context.Subjects.RemoveRange(context.Subjects);
 				context.Topics.RemoveRange(context.Topics);
+				context.Users.RemoveRange(context.Users);
+				context.Roles.RemoveRange(context.Roles);
 				context.SaveChanges();
 			}
+			#region Adding Users: 
+
+			var student = new IdentityRole
+			{
+				Name = "Student",
+				NormalizedName = "STUDENT"
+			};
+			var teacher = new IdentityRole
+			{
+				Name = "Teacher",
+				NormalizedName = "TEACHER"
+			};
+			var admin = new IdentityRole
+			{
+				Name = "Admin",
+				NormalizedName = "ADMIN"
+			};
+
+
+			roleStore
+			  .CreateAsync(student)
+			  .GetAwaiter()
+			  .GetResult();
+			roleStore
+				.CreateAsync(teacher)
+				.GetAwaiter()
+				.GetResult();
+			roleStore
+				.CreateAsync(admin)
+				.GetAwaiter()
+				.GetResult();
+
+			var jacob = new Account
+			{
+				UserName = "Jacob@Example.com",
+				FullName = "Jacob B",
+				Email = "Jacob@Example.com"
+			};
+			var danyal = new Account
+			{
+				UserName = "Danyal@Example.com",
+				FullName = "Danyal S",
+				Email = "Danyal@Example.com" //LEARN TO SPELL >.<
+			};
+			var matt = new Account
+			{
+				UserName = "Matt@Example.com",
+				FullName = "Matt H",
+				Email = "Matt@Example.com"
+			};
+			var jess = new Account
+			{
+				UserName = "Jess@Example.com",
+				FullName = "Jess H",
+				Email = "Jess@Example.com"
+			};
+
+			userManager
+				.CreateAsync(jacob, "password")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(danyal, "Password1!")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(matt, "password")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(jess, "password")
+				.GetAwaiter()
+				.GetResult();
+
+			context.UserRoles.AddRange(new IdentityUserRole<string>[]
+			{
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(jacob).Result,
+					RoleId = roleStore.GetRoleIdAsync(admin).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(danyal).Result,
+					RoleId = roleStore.GetRoleIdAsync(student).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(matt).Result,
+					RoleId = roleStore.GetRoleIdAsync(student).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(jess).Result,
+					RoleId = roleStore.GetRoleIdAsync(teacher).Result
+				}
+			});
+
+			#endregion
+
 
 			var demoTopics = new List<Topic>() 
 			{ 
