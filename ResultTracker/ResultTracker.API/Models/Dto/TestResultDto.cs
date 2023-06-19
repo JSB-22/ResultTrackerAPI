@@ -11,6 +11,6 @@ namespace ResultTracker.API.Models.Dto
 		public TopicDto? topic { get; set; }
 		public SubjectDto? Subject { get; set; }
 
-		public AccountDto? StudentAccount { get; set; }
+		public AccountDto? Account { get; set; }
 	}
 }

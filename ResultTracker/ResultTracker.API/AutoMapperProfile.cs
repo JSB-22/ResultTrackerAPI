@@ -16,7 +16,7 @@ namespace ResultTracker.API
             CreateMap<SubjectDto, Subject>().ReverseMap().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>$"{src.ExamBoard.ToUpper()} , {src.Name}"));
             CreateMap<AddSubjectRequestDto, Subject>().ReverseMap();
             CreateMap<UpdateSubjectRequestDto, Subject>().ReverseMap();
-            CreateMap<TestResultDto, TestResult>().ReverseMap();
+            CreateMap<TestResultDto, TestResult>().ReverseMap().ForMember(dest=>dest.Account,opt=>opt.MapFrom(src=>src.Student));
             CreateMap<AddTestResultRequestDto, TestResult>().ReverseMap();
             CreateMap<UpdateTestResultRequestDto, TestResult>().ReverseMap();
 
