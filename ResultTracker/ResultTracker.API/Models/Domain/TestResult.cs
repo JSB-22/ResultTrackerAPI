@@ -14,8 +14,10 @@ namespace ResultTracker.API.Models.Domain
 		public Guid TopicId { get; set; }
 		public Topic Topic { get; set; }
 		public Subject Subject { get; set; }
+		[ValidateNever]
+		[ForeignKey("Student")]
 		public string StudentId { get; set; } = "";
-		public Account StudentAccount { get; set; }
+		public Account Student { get; set; }
 
     }
 }

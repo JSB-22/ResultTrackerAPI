@@ -33,7 +33,7 @@ namespace ResultTracker.API.Repositories
 
 		public async Task<List<TestResult>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
 		{
-			var testResults = _context.Results.Include("Topic").Include("Subject").Include("StudentAccount").Include("StudentAccount.Teacher");
+			var testResults = _context.Results.Include("Topic").Include("Subject").Include("Student").Include("Student.Teacher");
 			//Filter query:
 			if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
 			{

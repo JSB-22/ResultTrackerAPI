@@ -151,7 +151,7 @@ namespace ResultTracker.API.Data
 					PercentageResult = 17,
 					TopicId = Guid.Parse("d07121f2-0aa6-4a14-8d21-b086e2edf798"),
 					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"),
-					StudentAccount = danyal
+					Student = danyal
 				},
 				new TestResult() //Foundation maths fraction good grade.
 				{
@@ -160,7 +160,7 @@ namespace ResultTracker.API.Data
 					PercentageResult = 88,
 					TopicId = Guid.Parse("d07121f2-0aa6-4a14-8d21-b086e2edf798"),
 					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"),
-					StudentAccount = matt
+					Student = matt
 				},
 				new TestResult() //A-level maths.
 				{
@@ -169,7 +169,7 @@ namespace ResultTracker.API.Data
 					PercentageResult = 60,
 					TopicId = Guid.Parse("a7a306f1-8993-413b-8784-045b2ee9c97b"),
 					SubjectId = Guid.Parse("ef2a8d07-7047-4e15-bd2b-679bb638d789"),
-					StudentAccount = matt
+					Student = matt
 				},
 				new TestResult() //Early years english.
 				{
@@ -178,7 +178,7 @@ namespace ResultTracker.API.Data
 					PercentageResult = 70,
 					TopicId = Guid.Parse("54a23bab-d599-4236-aacb-9e2a4ce2f7fc"),
 					SubjectId = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"),
-					StudentAccount = danyal
+					Student = danyal
 				}
 			};
 			context.Results.AddRange(demoTestResults);
