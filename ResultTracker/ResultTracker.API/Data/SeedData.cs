@@ -70,7 +70,7 @@ namespace ResultTracker.API.Data
 			{
 				UserName = "Danyal@Example.com",
 				FullName = "Danyal S",
-				Email = "Danyal@Example.com", //LEARN TO SPELL >.<
+				Email = "Danyal@Example.com", 
 				Teacher = jess
 			};
 			var matt = new Account
