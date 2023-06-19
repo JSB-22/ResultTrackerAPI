@@ -138,7 +138,7 @@ namespace ResultTracker.API.Data
 			{
 				new Subject() { Id = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"), ExamBoard = "AQA", Name = "Foundation Mathematics" },
 				new Subject() { Id = Guid.Parse("ef2a8d07-7047-4e15-bd2b-679bb638d789"), ExamBoard = "EDEXCEL", Name = "A-Level Mathematics" },
-				new Subject() { Id = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"), ExamBoard = "Early years", Name = "Engish" },
+				new Subject() { Id = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"), ExamBoard = "Early years", Name = "English" },
 			};
 			context.Subjects.AddRange(demoSubjects);
 
