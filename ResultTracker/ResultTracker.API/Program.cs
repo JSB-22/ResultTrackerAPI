@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResultTracker.API.Data;
+using ResultTracker.API.Middlewares;
 using ResultTracker.API.Repositories;
 using ResultTracker.API.Repositories.Interfaces;
 using ResultTracker.API.Users.Domain;
@@ -98,6 +99,8 @@ namespace ResultTracker.API
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+
+			app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 			app.UseHttpsRedirection();
 
