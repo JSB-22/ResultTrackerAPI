@@ -9,11 +9,11 @@ using ResultTracker.API.Data;
 
 #nullable disable
 
-namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
+namespace ResultTracker.API.Migrations
 {
-    [DbContext(typeof(ResultTrackerAuthDbContext))]
-    [Migration("20230615101830_Creating Auth Database")]
-    partial class CreatingAuthDatabase
+    [DbContext(typeof(ResultTrackerDbContext))]
+    [Migration("20230616105830_Rename")]
+    partial class Rename
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,29 +50,6 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c2cd8a78-af3b-4088-9f65-323f3d7c49b9",
-                            ConcurrencyStamp = "c2cd8a78-af3b-4088-9f65-323f3d7c49b9",
-                            Name = "Student",
-                            NormalizedName = "STUDENT"
-                        },
-                        new
-                        {
-                            Id = "d3ac5e91-8ccb-4eca-8a2b-6dbb5d155b3b",
-                            ConcurrencyStamp = "d3ac5e91-8ccb-4eca-8a2b-6dbb5d155b3b",
-                            Name = "Teacher",
-                            NormalizedName = "TEACHER"
-                        },
-                        new
-                        {
-                            Id = "d7dc84a1-aa48-4576-b482-e424dc697675",
-                            ConcurrencyStamp = "d7dc84a1-aa48-4576-b482-e424dc697675",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -254,6 +231,80 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ResultTracker.API.Models.Domain.Subject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExamBoard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("ResultTracker.API.Models.Domain.TestResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PercentageResult")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentAccountId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("Results");
+                });
+
+            modelBuilder.Entity("ResultTracker.API.Models.Domain.Topic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Year")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Topics");
+                });
+
             modelBuilder.Entity("ResultTracker.API.Users.Domain.Account", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -261,6 +312,11 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("TeacherId");
 
                     b.HasDiscriminator().HasValue("Account");
                 });
@@ -314,6 +370,40 @@ namespace ResultTracker.API.Migrations.ResultTrackerAuthDb
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ResultTracker.API.Models.Domain.TestResult", b =>
+                {
+                    b.HasOne("ResultTracker.API.Users.Domain.Account", "StudentAccount")
+                        .WithMany()
+                        .HasForeignKey("StudentAccountId");
+
+                    b.HasOne("ResultTracker.API.Models.Domain.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResultTracker.API.Models.Domain.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentAccount");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("ResultTracker.API.Users.Domain.Account", b =>
+                {
+                    b.HasOne("ResultTracker.API.Users.Domain.Account", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Teacher");
                 });
 #pragma warning restore 612, 618
         }

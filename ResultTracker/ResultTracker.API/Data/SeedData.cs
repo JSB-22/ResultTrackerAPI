@@ -1,4 +1,7 @@
-﻿using ResultTracker.API.Models.Domain;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using ResultTracker.API.Models.Domain;
+using ResultTracker.API.Users.Domain;
 
 namespace ResultTracker.API.Data
 {
@@ -7,13 +10,121 @@ namespace ResultTracker.API.Data
 		public static void Initialise(IServiceProvider serviceProvider)
 		{
 			var context = serviceProvider.GetRequiredService<ResultTrackerDbContext>();
-			if (context.Results.Any()||context.Topics.Any()||context.Subjects.Any())
+			var userManager = serviceProvider.GetRequiredService<UserManager<Account>>();
+			var roleStore = new RoleStore<IdentityRole>(context);
+
+			if (context.Results.Any()||context.Topics.Any()||context.Subjects.Any()||context.Users.Any())
 			{
 				context.Results.RemoveRange(context.Results);
 				context.Subjects.RemoveRange(context.Subjects);
 				context.Topics.RemoveRange(context.Topics);
+				context.Users.RemoveRange(context.Users);
+				context.Roles.RemoveRange(context.Roles);
 				context.SaveChanges();
 			}
+			#region Adding Users: 
+
+			var student = new IdentityRole
+			{
+				Name = "Student",
+				NormalizedName = "STUDENT"
+			};
+			var teacher = new IdentityRole
+			{
+				Name = "Teacher",
+				NormalizedName = "TEACHER"
+			};
+			var admin = new IdentityRole
+			{
+				Name = "Admin",
+				NormalizedName = "ADMIN"
+			};
+
+
+			roleStore
+			  .CreateAsync(student)
+			  .GetAwaiter()
+			  .GetResult();
+			roleStore
+				.CreateAsync(teacher)
+				.GetAwaiter()
+				.GetResult();
+			roleStore
+				.CreateAsync(admin)
+				.GetAwaiter()
+				.GetResult();
+
+			var jacob = new Account
+			{
+				UserName = "Jacob@Example.com",
+				FullName = "Jacob B",
+				Email = "Jacob@Example.com"
+			};
+			var jess = new Account
+			{
+				UserName = "Jess@Example.com",
+				FullName = "Jess H",
+				Email = "Jess@Example.com"
+			};
+			var danyal = new Account
+			{
+				UserName = "Danyal@Example.com",
+				FullName = "Danyal S",
+				Email = "Danyal@Example.com", 
+				Teacher = jess
+			};
+			var matt = new Account
+			{
+				UserName = "Matt@Example.com",
+				FullName = "Matt H",
+				Email = "Matt@Example.com",
+				Teacher = jess
+			};
+
+
+			userManager
+				.CreateAsync(jacob, "password")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(jess, "password")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(danyal, "Password1!")
+				.GetAwaiter()
+				.GetResult();
+			userManager
+				.CreateAsync(matt, "password")
+				.GetAwaiter()
+				.GetResult();
+
+			context.UserRoles.AddRange(new IdentityUserRole<string>[]
+			{
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(jacob).Result,
+					RoleId = roleStore.GetRoleIdAsync(admin).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(danyal).Result,
+					RoleId = roleStore.GetRoleIdAsync(student).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(matt).Result,
+					RoleId = roleStore.GetRoleIdAsync(student).Result
+				},
+				new IdentityUserRole<string>
+				{
+					UserId = userManager.GetUserIdAsync(jess).Result,
+					RoleId = roleStore.GetRoleIdAsync(teacher).Result
+				}
+			});
+
+			#endregion
+
 
 			var demoTopics = new List<Topic>() 
 			{ 
@@ -27,7 +138,7 @@ namespace ResultTracker.API.Data
 			{
 				new Subject() { Id = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"), ExamBoard = "AQA", Name = "Foundation Mathematics" },
 				new Subject() { Id = Guid.Parse("ef2a8d07-7047-4e15-bd2b-679bb638d789"), ExamBoard = "EDEXCEL", Name = "A-Level Mathematics" },
-				new Subject() { Id = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"), ExamBoard = "Early years", Name = "Engish" },
+				new Subject() { Id = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"), ExamBoard = "Early years", Name = "English" },
 			};
 			context.Subjects.AddRange(demoSubjects);
 
@@ -39,7 +150,8 @@ namespace ResultTracker.API.Data
 					Notes = "Revise more next time",
 					PercentageResult = 17,
 					TopicId = Guid.Parse("d07121f2-0aa6-4a14-8d21-b086e2edf798"),
-					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0")
+					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"),
+					Student = danyal
 				},
 				new TestResult() //Foundation maths fraction good grade.
 				{
@@ -47,7 +159,8 @@ namespace ResultTracker.API.Data
 					Notes = "Well done!",
 					PercentageResult = 88,
 					TopicId = Guid.Parse("d07121f2-0aa6-4a14-8d21-b086e2edf798"),
-					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0")
+					SubjectId = Guid.Parse("19550b42-129e-4f84-83dd-4d4aea4bbbe0"),
+					Student = matt
 				},
 				new TestResult() //A-level maths.
 				{
@@ -55,7 +168,8 @@ namespace ResultTracker.API.Data
 					Notes = "Careful with your derivatives in the final exam.",
 					PercentageResult = 60,
 					TopicId = Guid.Parse("a7a306f1-8993-413b-8784-045b2ee9c97b"),
-					SubjectId = Guid.Parse("ef2a8d07-7047-4e15-bd2b-679bb638d789")
+					SubjectId = Guid.Parse("ef2a8d07-7047-4e15-bd2b-679bb638d789"),
+					Student = matt
 				},
 				new TestResult() //Early years english.
 				{
@@ -63,7 +177,8 @@ namespace ResultTracker.API.Data
 					Notes = "Really good progress, keep it up",
 					PercentageResult = 70,
 					TopicId = Guid.Parse("54a23bab-d599-4236-aacb-9e2a4ce2f7fc"),
-					SubjectId = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622")
+					SubjectId = Guid.Parse("629d6eb2-9c92-4975-81cd-f4b896521622"),
+					Student = danyal
 				}
 			};
 			context.Results.AddRange(demoTestResults);

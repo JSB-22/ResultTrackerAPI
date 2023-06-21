@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ResultTracker.API.Data;
+using ResultTracker.API.Middlewares;
 using ResultTracker.API.Repositories;
 using ResultTracker.API.Repositories.Interfaces;
 using ResultTracker.API.Users.Domain;
@@ -43,7 +44,6 @@ namespace ResultTracker.API
 			#endregion
 
 			builder.Services.AddDbContext<ResultTrackerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ResultTrackerConnectionString")));
-			builder.Services.AddDbContext<ResultTrackerAuthDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ResultTrackerAuthConnectionString")));
 
 			builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -57,7 +57,7 @@ namespace ResultTracker.API
 			builder.Services.AddIdentityCore<Account>(option => option.SignIn.RequireConfirmedEmail = false) //Confirm this.  WAS <IdentityUser>
 				.AddRoles<IdentityRole>()
 				.AddTokenProvider<DataProtectorTokenProvider<Account>>("ResultTracker")
-				.AddEntityFrameworkStores<ResultTrackerAuthDbContext>()
+				.AddEntityFrameworkStores<ResultTrackerDbContext>()
 				.AddDefaultTokenProviders();
 
 			builder.Services.Configure<IdentityOptions>(options =>
@@ -99,6 +99,8 @@ namespace ResultTracker.API
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+
+			app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 			app.UseHttpsRedirection();
 

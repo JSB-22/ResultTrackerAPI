@@ -33,7 +33,7 @@ namespace ResultTracker.API.Repositories
 
 		public async Task<List<TestResult>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
 		{
-			var testResults = _context.Results.Include("Topic").Include("Subject");
+			var testResults = _context.Results.Include("Topic").Include("Subject").Include("Student").Include("Student.Teacher");
 			//Filter query:
 			if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
 			{
@@ -41,7 +41,11 @@ namespace ResultTracker.API.Repositories
 				{
 					testResults = testResults.Where(tr => tr.Topic.Name.ToLower().Contains(filterQuery.ToLower()));
 				}
-				else 
+				else if (filterOn.Equals("Teacher", StringComparison.OrdinalIgnoreCase))
+				{
+					testResults = testResults.Where(tr => tr.Student.Teacher.FullName.ToLower().Contains(filterQuery.ToLower()));
+				}
+				else
 				{
 					testResults = testResults.Where(tr => tr.Subject.Name.ToLower().Contains(filterQuery.ToLower()));
 				}

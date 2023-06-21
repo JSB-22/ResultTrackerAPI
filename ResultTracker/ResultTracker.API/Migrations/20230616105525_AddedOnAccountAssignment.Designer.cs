@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResultTracker.API.Data;
 
@@ -11,9 +12,11 @@ using ResultTracker.API.Data;
 namespace ResultTracker.API.Migrations
 {
     [DbContext(typeof(ResultTrackerDbContext))]
-    partial class ResultTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230616105525_AddedOnAccountAssignment")]
+    partial class AddedOnAccountAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,6 +256,9 @@ namespace ResultTracker.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -261,7 +267,7 @@ namespace ResultTracker.API.Migrations
 
                     b.Property<string>("StudentId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uniqueidentifier");
@@ -271,7 +277,7 @@ namespace ResultTracker.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("SubjectId");
 
@@ -368,11 +374,9 @@ namespace ResultTracker.API.Migrations
 
             modelBuilder.Entity("ResultTracker.API.Models.Domain.TestResult", b =>
                 {
-                    b.HasOne("ResultTracker.API.Users.Domain.Account", "Student")
+                    b.HasOne("ResultTracker.API.Users.Domain.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
 
                     b.HasOne("ResultTracker.API.Models.Domain.Subject", "Subject")
                         .WithMany()
@@ -386,7 +390,7 @@ namespace ResultTracker.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Student");
+                    b.Navigation("Account");
 
                     b.Navigation("Subject");
 
