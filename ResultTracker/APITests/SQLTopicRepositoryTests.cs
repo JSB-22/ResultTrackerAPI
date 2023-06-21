@@ -43,9 +43,10 @@ namespace APITests
 		public async Task  WhenTopicCreated_ThenTopicCountIncreases()
 		{
 			_sut = new SQLTopicRepository(_context);
+			var beforeCount = _context.Topics.ToList().Count;
 			var topicToAdd = new Topic() { Name = "Test Topic 2", Year = "4"};
 			await _sut.CreateTopicAsync(topicToAdd);
-			Assert.That(_context.Topics.ToList().Count, Is.EqualTo(2));
+			Assert.That(_context.Topics.ToList().Count, Is.EqualTo(beforeCount+1));
 		}
 		[Test]
 		[Category("Create/Sad")]
@@ -60,9 +61,10 @@ namespace APITests
 		public async Task WhenTopicDeleted_ThenTopicCountDecreases()
 		{
 			_sut = new SQLTopicRepository(_context);
+			var beforeCount = _context.Topics.ToList().Count;
 			var id = Guid.Parse("50348f5a-b7e9-4337-82bc-e2a4f72da120");
 			await _sut.DeleteTopicAsync(id);
-			Assert.That(_context.Topics.ToList().Count, Is.EqualTo(0));
+			Assert.That(_context.Topics.ToList().Count, Is.EqualTo(beforeCount-1));
 		}
 		[Test]
 		[Category("Delete/Happy")]
@@ -91,7 +93,7 @@ namespace APITests
 			_sut = new SQLTopicRepository(_context);
 			var topics = await _sut.GetAllAsync();
 			Assert.That(topics, Is.InstanceOf<List<Topic>>());
-			Assert.That(topics.Count, Is.EqualTo(1));
+			Assert.That(topics.Count, Is.EqualTo(_context.Topics.ToList().Count));
 		}
 		[Test]
 		[Category("GetByIdAsync/Happy")]

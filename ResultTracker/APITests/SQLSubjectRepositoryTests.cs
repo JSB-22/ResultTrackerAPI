@@ -43,9 +43,10 @@ namespace APITests
 		public async Task WhenSubjectCreated_ThenSubjectCountIncreases()
 		{
 			_sut = new SQLSubjectRepository(_context);
+			var beforeCount = _context.Subjects.ToList().Count;
 			var subjectToAdd = new Subject() { Name = "Test Subject 2", ExamBoard = "TestBoard2" };
 			await _sut.CreateSubjectAsync(subjectToAdd);
-			Assert.That(_context.Subjects.ToList().Count, Is.EqualTo(2));
+			Assert.That(_context.Subjects.ToList().Count, Is.EqualTo(beforeCount+1));
 		}
 		[Test]
 		[Category("Create/Sad")]
@@ -60,9 +61,10 @@ namespace APITests
 		public async Task WhenSubjectDeleted_ThenSubjectCountDecreases()
 		{
 			_sut = new SQLSubjectRepository(_context);
+			var beforeCount = _context.Subjects.ToList().Count;
 			var id = Guid.Parse("50348f5a-b7e9-4337-82bc-e2a4f72da120");
 			await _sut.DeleteSubjectAsync(id);
-			Assert.That(_context.Subjects.ToList().Count, Is.EqualTo(0));
+			Assert.That(_context.Subjects.ToList().Count, Is.EqualTo(beforeCount-1));
 		}
 		[Test]
 		[Category("Delete/Happy")]
@@ -91,7 +93,7 @@ namespace APITests
 			_sut = new SQLSubjectRepository(_context);
 			var subjects = await _sut.GetAllAsync();
 			Assert.That(subjects, Is.InstanceOf<List<Subject>>());
-			Assert.That(subjects.Count, Is.EqualTo(1));
+			Assert.That(subjects.Count, Is.EqualTo(_context.Subjects.ToList().Count));
 		}
 		[Test]
 		[Category("GetByIdAsync/Happy")]
