@@ -48,7 +48,7 @@ namespace APITests
 			Assert.That(_sut, Is.InstanceOf<SQLTestResultRepository>());
 		}
 		[Test]
-		[Category("Create/Happy")]
+		[Category("CreateTestResult/Happy")]
 		public async Task WhenTestResultAdded_ThenCreateAsyncReturnsResult()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -58,7 +58,7 @@ namespace APITests
 			Assert.That(returnedResult.Id, Is.EqualTo(Guid.Parse("26816fed-b02e-4e6c-89b9-a895b0af884f")));
 		}
 		[Test]
-		[Category("Delete/Happy")]
+		[Category("DeleteTestResult/Happy")]
 		public async Task WhenValidTestResultDelete_ThenDeleteAsyncReturnsTestResult()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -67,7 +67,7 @@ namespace APITests
 			Assert.That(deletedTestResult.Notes, Is.EqualTo("Test Notes"));
 		}
 		[Test]
-		[Category("Delete/Sad")]
+		[Category("DeleteTestResult/Sad")]
 		public async Task WhenInvalidTestResultDelete_ThenDeleteAsyncReturnsNull()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -75,17 +75,17 @@ namespace APITests
 			Assert.That(deletedTestResult,Is.Null);
 		}
 		[Test]
-		[Category("GetAll/Happy")]
+		[Category("GetAllTestResult/Happy")]
 		public async Task WhenGetAll_ReturnsListOfTestResults()
 		{
 			_sut = new SQLTestResultRepository(_context);
 			var testResultsReturned = await _sut.GetAllAsync();
 			Assert.That(testResultsReturned, Is.TypeOf<List<TestResult>>());
-			Assert.That(testResultsReturned.ToList().Count, Is.EqualTo(1));
+			Assert.That(testResultsReturned.ToList().Count, Is.EqualTo(_context.Results.ToList().Count));
 		}
-		//To do: 
+		//Need to still add further tests for GetAll paths. 
 		[Test]
-		[Category("GetById/Happy")]
+		[Category("GetByIdTestResult/Happy")]
 		public async Task WhenGetById_ReturnsCorrectTestResult()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -97,7 +97,7 @@ namespace APITests
 			Assert.That(testResultReturned.Subject.Name, Is.EqualTo("Test Subject"));
 		}
 		[Test]
-		[Category("GetById/Sad")]
+		[Category("GetByIdTestResult/Sad")]
 		public async Task WhenGetByInvalidId_ReturnsNull()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -105,7 +105,7 @@ namespace APITests
 			Assert.That(testResultReturned, Is.Null);
 		}
 		[Test]
-		[Category("Update/Happy")]
+		[Category("UpdateTestResult/Happy")]
 		public async Task WhenUpdateValid_ReturnsCorrectUpdateTestResult()
 		{
 			_sut = new SQLTestResultRepository(_context);
@@ -119,6 +119,23 @@ namespace APITests
 			};
 			var testResultToUpdate = await _sut.UpdateAsync(Guid.Parse("dabd4d63-cea5-4fec-9e1c-764b8efc3f96"), resultUpdate);
 			Assert.That(testResultToUpdate.Notes, Is.EqualTo("Test Update"));
+		}
+		[Test]
+		[Category("UpdateTestResult/Sad")]
+		public async Task WhenUpdateInvalid_ReturnsNull()
+		{
+			_sut = new SQLTestResultRepository(_context);
+			var resultUpdate = new TestResult()
+			{
+				Id = Guid.Parse("dabd4d63-cea5-4fec-9e1c-764b8efc3f96"),
+				Notes = "Test Update",
+				PercentageResult = 100,
+				Student = Helper.CreateFakeAccount("1"),
+				TopicId = Guid.Parse("abd44265-5a60-4ae1-a17d-845e64adcf86"),
+				SubjectId = Guid.Parse("3528b040-dd35-493e-baa4-0bbb00341f97")
+			};
+			var testResultToUpdate = await _sut.UpdateAsync(Guid.Parse("dabd4d63-cea5-4fec-9e1c-764b8efc3f97"), resultUpdate);
+			Assert.That(testResultToUpdate, Is.Null);
 		}
 
 	}
