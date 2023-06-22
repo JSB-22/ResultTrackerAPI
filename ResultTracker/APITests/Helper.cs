@@ -23,6 +23,7 @@ namespace APITests
 			mgr.Setup(x => x.DeleteAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
 			mgr.Setup(x => x.CreateAsync(It.IsAny<TUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success).Callback<TUser, string>((x, y) => ls.Add(x));
 			mgr.Setup(x => x.UpdateAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
+			mgr.Setup(x => x.AddToRolesAsync(It.IsAny<TUser>(), It.IsAny<IEnumerable<string>>())).ReturnsAsync(IdentityResult.Success);
 
 			return mgr;
 		}
