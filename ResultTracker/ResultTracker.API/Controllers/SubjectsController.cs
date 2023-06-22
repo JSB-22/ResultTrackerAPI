@@ -55,7 +55,7 @@ namespace ResultTracker.API.Controllers
 		public async Task<IActionResult> Update(Guid id, UpdateSubjectRequestDto updateSubjectRequestDto)
 		{
 			var existingSubject = await _repository.UpdateSubjectAsync(id, _mapper.Map<Subject>(updateSubjectRequestDto));
-			if (existingSubject == null) return null;
+			if (existingSubject == null) return NotFound();
 			return Ok(_mapper.Map<SubjectDto>(existingSubject));
 		}
 	}
