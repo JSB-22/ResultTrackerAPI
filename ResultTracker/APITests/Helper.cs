@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Moq;
 using ResultTracker.API.Models.Domain;
+using ResultTracker.API.Models.Dto;
 using ResultTracker.API.Users.Domain;
 using System;
 using System.Collections.Generic;
