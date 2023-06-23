@@ -41,13 +41,12 @@ namespace APITests
 			var validRequest = new RegisterRequestDto()
 			{
 				FullName = "Test",
-				Roles = new string[] { "Test Role" },
 				Username = "Email@Email.Com"
 			};
 			var result = await _sut.Register(validRequest);
 			Assert.That(result, Is.TypeOf<OkObjectResult>());
 		}
-		[Test]
+/*		[Test]
 		[Category("Register/Sad")]
 		public async Task WhenValidRegisterRequestNoRoles_AuthController_ReturnsBadRequest()
 		{
@@ -61,7 +60,7 @@ namespace APITests
 			};
 			var result = await _sut.Register(validRequest);
 			Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
-		}
+		}*/
 		[Test]
 		[Category("Register/Sad")]
 		public async Task WhenValidRegisterRequest_UserManagerSuceededFalse_ReturnsBadRequest()
@@ -75,7 +74,6 @@ namespace APITests
 			var validRequest = new RegisterRequestDto()
 			{
 				FullName = "Test",
-				Roles = new string[] { "Test role" },
 				Username = "Email@Email.Com"
 			};
 			var result = await _sut.Register(validRequest);
