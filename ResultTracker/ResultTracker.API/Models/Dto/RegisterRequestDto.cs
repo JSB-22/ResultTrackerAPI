@@ -11,7 +11,7 @@ namespace ResultTracker.API.Models.Dto
         [DataType(DataType.Password)]
         public string Password { get; set; } = "password";
         public string FullName { get; set; } = "John Smith";
-        public string[] Roles { get; set; }
+        //public string[] Roles { get; set; }
         public string? TeacherId { get; set; } = null;
     }
 }

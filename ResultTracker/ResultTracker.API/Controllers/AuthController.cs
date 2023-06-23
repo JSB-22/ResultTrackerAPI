@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ResultTracker.API.Models.Dto;
@@ -33,15 +34,11 @@ namespace ResultTracker.API.Controllers
 			var identityResult = await _userManager.CreateAsync(identityUser, registerRequestDto.Password);
 			if (identityResult.Succeeded)
 			{
-				//Add roles if successful:
-				if (registerRequestDto.Roles != null && registerRequestDto.Roles.Any())
-				{
-					identityResult = await _userManager.AddToRolesAsync(identityUser, registerRequestDto.Roles);
+					identityResult = await _userManager.AddToRolesAsync(identityUser, new string[] {"student"});
 					if (identityResult.Succeeded)
 					{
 						return Ok("User was registered. You may now log in.");
 					}
-				}
 			}
 			return BadRequest("Something went wrong...");
 		}
@@ -69,6 +66,44 @@ namespace ResultTracker.API.Controllers
 				return BadRequest("Incorrect Password");
 			}
 			return BadRequest("Username or Password Incorrect");
+		}
+
+
+		[HttpPost]
+		[Route("RoleChange")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> RoleChange([FromBody] RoleChangeRequestDto roleChangeRequestDto)
+		{
+			if (roleChangeRequestDto.Roles == null)
+			{
+				return BadRequest("New roles are required.");	
+			}
+			var userToBeEdited = await _userManager.FindByEmailAsync(roleChangeRequestDto.Username);
+			if (userToBeEdited == null) return BadRequest("No Such user");
+			var userRoles = await _userManager.GetRolesAsync(userToBeEdited);
+
+
+			var editedResult = await _userManager.RemoveFromRolesAsync(userToBeEdited, userRoles);
+			if (editedResult.Succeeded)
+			{
+				var updatedResult = await _userManager.AddToRolesAsync(userToBeEdited, roleChangeRequestDto.Roles);
+				if (updatedResult.Succeeded)
+				{
+					string beforeRoles = "";
+					string afterRoles = "";
+					foreach (var role in userRoles)
+					{
+						beforeRoles += $"-{role}";
+					}
+					foreach (var role in roleChangeRequestDto.Roles)
+					{
+						afterRoles += $"-{role}";
+					}
+					return Ok($"User has been edited from: {beforeRoles} to: {afterRoles}");
+				}
+				return BadRequest("Roles cannot be updated");
+			}
+			return BadRequest("User cannot be removed from current role...");
 		}
 	}
 }
