@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResultTracker.API.Models.Domain;
 using ResultTracker.API.Models.Dto;
 using ResultTracker.API.Repositories.Interfaces;
+using System.Data;
 
 namespace ResultTracker.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Teacher, Admin")]
 	public class TopicsController : ControllerBase
 	{
 		private readonly ITopicRepository _repository;

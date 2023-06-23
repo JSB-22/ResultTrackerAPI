@@ -45,6 +45,10 @@ namespace ResultTracker.API.Repositories
 				{
 					testResults = testResults.Where(tr => tr.Student.Teacher.FullName.ToLower().Contains(filterQuery.ToLower()));
 				}
+				else if (filterOn.Equals("Student", StringComparison.OrdinalIgnoreCase))
+				{
+					testResults = testResults.Where(tr => tr.Student.FullName.ToLower().Contains(filterQuery.ToLower()));
+				}
 				else
 				{
 					testResults = testResults.Where(tr => tr.Subject.Name.ToLower().Contains(filterQuery.ToLower()));

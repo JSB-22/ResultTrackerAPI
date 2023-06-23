@@ -27,7 +27,8 @@ namespace ResultTracker.API.Controllers
 			{
 				UserName = registerRequestDto.Username,
 				Email = registerRequestDto.Username,
-				FullName = registerRequestDto.FullName
+				FullName = registerRequestDto.FullName,
+				TeacherId = registerRequestDto.TeacherId
 			};
 			var identityResult = await _userManager.CreateAsync(identityUser, registerRequestDto.Password);
 			if (identityResult.Succeeded)
