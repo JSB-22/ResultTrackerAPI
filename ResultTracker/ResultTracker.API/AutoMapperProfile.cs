@@ -10,10 +10,10 @@ namespace ResultTracker.API
 	{
         public AutoMapperProfile()
         {
-            CreateMap<TopicDto, Topic>().ReverseMap().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>$"Year: {src.Year} - {src.Name}"));
+            CreateMap<TopicDto, Topic>().ReverseMap();
             CreateMap<AddTopicRequestDto, Topic>().ReverseMap();
             CreateMap<UpdateTopicRequestDto, Topic>().ReverseMap();
-            CreateMap<SubjectDto, Subject>().ReverseMap().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>$"{src.ExamBoard.ToUpper()} , {src.Name}"));
+            CreateMap<SubjectDto, Subject>().ReverseMap();
             CreateMap<AddSubjectRequestDto, Subject>().ReverseMap();
             CreateMap<UpdateSubjectRequestDto, Subject>().ReverseMap();
             CreateMap<TestResultDto, TestResult>().ReverseMap().ForMember(dest=>dest.Account,opt=>opt.MapFrom(src=>src.Student));
