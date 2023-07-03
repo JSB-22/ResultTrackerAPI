@@ -1,8 +1,7 @@
 ﻿namespace ResultTracker.UI.Models.Dto
 {
-	public class TopicDto
+	public class AddTopicRequestDto
 	{
-		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public string Year { get; set; }
 	}
