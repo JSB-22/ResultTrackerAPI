@@ -5,4 +5,9 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>@{
+            var userRoles = Context.User.FindFirst("RoleClaim");
+            var customClaim = Context.User.FindFirst("TokenClaim");
+        }User is in @userRoles.Value has custom claim value: @customClaim.Value
+    </p>
 </div>
