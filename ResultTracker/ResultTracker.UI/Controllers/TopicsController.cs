@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ResultTracker.UI.Controllers
 {
-	[Authorize]
+	[Authorize(Roles ="Admin,Teacher")]
 	public class TopicsController : Controller
 	{
 		private readonly IHttpClientFactory httpClientFactory;

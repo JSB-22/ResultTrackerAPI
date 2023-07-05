@@ -22,6 +22,12 @@ namespace ResultTracker.UI.Controllers
 		{
 			this.httpClientFactory = httpClientFactory;
 		}
+		public IActionResult AccessDenied()
+		{
+			return View();
+		}
+
+
 		public IActionResult Login()
 		{
 			return View();
@@ -82,7 +88,8 @@ namespace ResultTracker.UI.Controllers
 			var claims = new List<Claim>
 			{
 				new Claim("RoleClaim", userRole),
-				new Claim("TokenClaim", userToken)
+				new Claim("TokenClaim", userToken),
+				new Claim(ClaimTypes.Role,userRole)
 			};
 
 			var claimsIdentity = new ClaimsIdentity(

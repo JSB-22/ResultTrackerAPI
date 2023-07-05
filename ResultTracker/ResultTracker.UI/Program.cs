@@ -19,6 +19,7 @@ namespace ResultTracker.UI
 					options.LoginPath = "/Auth/Login";
 					//Choose name of the auth cookie
 					options.Cookie.Name = "RT_auth_cookie";
+					options.AccessDeniedPath = "/Auth/AccessDenied";
 				});
 
 			var app = builder.Build();
