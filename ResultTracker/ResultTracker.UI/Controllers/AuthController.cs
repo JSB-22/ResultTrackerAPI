@@ -51,19 +51,30 @@ namespace ResultTracker.UI.Controllers
 
 				return RedirectToAction("Index","Home");
 			}
-			//HttpContext.Response.Cookies.Append("token", token, new CookieOptions() {Expires = DateTime.Now.AddMinutes(15)});
+			//HttpContext.Response.Cookies.Append("token", token, new CookieOptions() {Expires = DateTime.Now.AddMinutes(15)}); (OLD) 
 		}
+		[HttpPost]
+		public async Task<IActionResult> Logout()
+		{
+            //Needs some editing and understanding here. 
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            Response.Cookies.Delete("RT_auth_cookie");
+            return RedirectToAction("login", "Auth");
+        }
 
 
-		//Test get function to ensure Claim behaviour: 
-		[HttpGet]
+		#region Note for claim reading: 
+		// -- NO LONGER IN USE -- // 
+		// -- Here for notes   -- // 
+/*		[HttpGet]
 		[Route("/read-claims")]
 		public IActionResult TestClaimReading()
 		{
 			var userRoles = HttpContext.User.FindFirst("RoleClaim");
 			var customClaim = HttpContext.User.FindFirst("TokenClaim");
 			return Content($"User is in {userRoles} has custom claim value: {customClaim.Value}");
-		}
+		}*/
+		#endregion
 
 
 		public async Task SignInUser(string userRole, string userToken)
