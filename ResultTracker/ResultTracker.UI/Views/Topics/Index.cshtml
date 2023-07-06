@@ -13,8 +13,7 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Year</th>
+			<th>Topic</th>
 			<th> </th>
 		</tr>
 	</thead>
@@ -23,8 +22,8 @@
 			foreach (var topic in Model)
 			{
 				<tr>
-					<td>@topic.Name</td>
-					<td>@topic.Year</td>
+					<td>
+					<b>Year @topic.Year : </b> @topic.Name</td>
 					<td>
 						<a class="btn btn-light" asp-controller="Topics" asp-route-id="@topic.Id" asp-action="Edit">Edit</a>
 					</td>
