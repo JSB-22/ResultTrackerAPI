@@ -5,9 +5,11 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResultTracker.UI.Controllers
 {
+	[Authorize(Roles ="Admin,Teacher")]
 	public class TopicsController : Controller
 	{
 		private readonly IHttpClientFactory httpClientFactory;
@@ -24,9 +26,7 @@ namespace ResultTracker.UI.Controllers
 			{
 				var client = httpClientFactory.CreateClient();
 
-				string? token;
-
-				HttpContext.Request.Cookies.TryGetValue("token", out token);
+				string token = HttpContext.User.FindFirst("TokenClaim").Value;
 
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -57,9 +57,7 @@ namespace ResultTracker.UI.Controllers
 		{
 			var client = httpClientFactory.CreateClient();
 
-			string? token;
-
-			HttpContext.Request.Cookies.TryGetValue("token", out token);
+			string token = HttpContext.User.FindFirst("TokenClaim").Value;
 
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -85,9 +83,7 @@ namespace ResultTracker.UI.Controllers
 		{
 			var client = httpClientFactory.CreateClient();
 
-			string? token;
-
-			HttpContext.Request.Cookies.TryGetValue("token", out token);
+			string token = HttpContext.User.FindFirst("TokenClaim").Value;
 
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.GetFromJsonAsync<TopicDto>($"https://localhost:7168/api/topics/{id}");
@@ -99,9 +95,7 @@ namespace ResultTracker.UI.Controllers
 		{
 			var client = httpClientFactory.CreateClient();
 
-			string? token;
-
-			HttpContext.Request.Cookies.TryGetValue("token", out token);
+			string token = HttpContext.User.FindFirst("TokenClaim").Value;
 
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var httpRequest = new HttpRequestMessage()
@@ -124,9 +118,7 @@ namespace ResultTracker.UI.Controllers
 			{
 				var client = httpClientFactory.CreateClient();
 
-				string? token;
-
-				HttpContext.Request.Cookies.TryGetValue("token", out token);
+				string token = HttpContext.User.FindFirst("TokenClaim").Value;
 
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				var httpResponseMessage = await client.DeleteAsync($"https://localhost:7168/api/topics/{id}");

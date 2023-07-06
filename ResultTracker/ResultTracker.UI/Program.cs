@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace ResultTracker.UI
 {
 	public class Program
@@ -9,6 +11,16 @@ namespace ResultTracker.UI
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddHttpClient();
+
+			//Adding cookie Auth: 
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+				options=> {
+					//Redirect UnAuthenticated users here
+					options.LoginPath = "/Auth/Login";
+					//Choose name of the auth cookie
+					options.Cookie.Name = "RT_auth_cookie";
+					options.AccessDeniedPath = "/Auth/AccessDenied";
+				});
 
 			var app = builder.Build();
 
@@ -25,12 +37,12 @@ namespace ResultTracker.UI
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
-
 			app.Run();
 		}
 	}
