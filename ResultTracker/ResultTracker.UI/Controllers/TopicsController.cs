@@ -68,12 +68,13 @@ namespace ResultTracker.UI.Controllers
 				Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json")
 			};
 			var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-			httpResponseMessage.EnsureSuccessStatusCode();
 
-			var response = await httpResponseMessage.Content.ReadFromJsonAsync<TopicDto>();
-			if (response is not null) return RedirectToAction("Index", "Topics");
-			return View();
-
+			if (httpResponseMessage.IsSuccessStatusCode)
+			{
+				var response = await httpResponseMessage.Content.ReadFromJsonAsync<TopicDto>();
+				if (response is not null) return RedirectToAction("Index", "Topics");
+			}
+			return View(model);
 		}
 		//
 		// EDIT
