@@ -4,7 +4,7 @@ namespace ResultTracker.UI.Models.Dto
 {
 	public class AddTopicRequestDto
 	{
-		[StringLength(20)]
+		[StringLength(30)]
         [Required(ErrorMessage = "Topic name is required")]
         public string Name { get; set; }
 		[Required]
