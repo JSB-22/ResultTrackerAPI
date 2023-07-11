@@ -14,7 +14,11 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th>Test Results</th>
+			<th>Student</th>
+			<th>Topic</th>
+			<th>Subject</th>
+			<th>Result (%)</th>
+			<th>Notes</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -23,7 +27,21 @@
 			{
 				<tr>
 					<td>
-						test: Result - @result.PercentageResult
+						@result.Account.StudentName
+					</td>
+					<td>
+						@result.topic.Name
+					</td>
+					<td>
+						@result.Subject.Name
+					</td>
+					<td>
+						@result.PercentageResult % 
+					</td>
+					<td>
+						@result.Notes
+					</td>
+					<td>
 						<nav style="display: flex; justify-content:flex-end">
 							<a class="btn btn-light" asp-controller="TestResults" asp-route-id="@result.Id" asp-action="Edit">Edit</a>
 							<a class="btn btn-danger">
