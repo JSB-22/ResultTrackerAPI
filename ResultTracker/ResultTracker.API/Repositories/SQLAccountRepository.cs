@@ -17,7 +17,7 @@ namespace ResultTracker.API.Repositories
 
         public async Task<List<Account>> GetAllAsync()
         {
-            return await _context.Accounts.ToListAsync();
+            return await _context.Accounts.Include("Teacher").ToListAsync();
         }
     }
 }

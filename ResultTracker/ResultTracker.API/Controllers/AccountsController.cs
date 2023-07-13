@@ -6,6 +6,7 @@ using ResultTracker.API.Models.Dto;
 using ResultTracker.API.Repositories.Interfaces;
 using ResultTracker.API.Users;
 using System.Data;
+using System.Security.Claims;
 
 namespace ResultTracker.API.Controllers
 {
@@ -22,10 +23,11 @@ namespace ResultTracker.API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        [Authorize(Roles ="Admin,Teacher")]
         public async Task<IActionResult> GetAllAccounts()
         {
-            var subjects = await _repository.GetAllAsync();
-            return Ok(subjects.Select(t => _mapper.Map<AccountDto>(t)));
+            var accounts = await _repository.GetAllAsync();
+            return Ok(accounts.Select(t => _mapper.Map<AccountDto>(t)));
         }
     }
 }

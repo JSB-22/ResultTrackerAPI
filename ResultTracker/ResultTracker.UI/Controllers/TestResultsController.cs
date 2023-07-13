@@ -67,6 +67,14 @@ namespace ResultTracker.UI.Controllers
             var subjectData = await GetSubjects(client);
             var accountData = await GetAccounts(client);
 
+
+            //Filtering list down: 
+            if (HttpContext.User.IsInRole("Teacher"))
+            {
+                accountData = accountData.Where(t => t.TeacherName == HttpContext.User.Identity.Name).ToList();
+            }
+            
+
             var model = new AddTestResultViewModel();
             model.TopicSelectList = new List<SelectListItem>();
             foreach (var topic in topicData)
