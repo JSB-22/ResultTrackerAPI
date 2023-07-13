@@ -30,7 +30,17 @@ namespace ResultTracker.UI.Controllers
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                var httpResponseMessage = await client.GetAsync("https://localhost:7168/api/TestResults"); //Goes to host and then the url. 
+                HttpResponseMessage httpResponseMessage; 
+
+                if (HttpContext.User.IsInRole("Student"))
+                {
+                    var studentName = HttpContext.User.Identity.Name;
+					httpResponseMessage = await client.GetAsync($"https://localhost:7168/api/TestResults?filterOn=Student&filterQuery={studentName}");
+				}
+                else 
+                {
+					httpResponseMessage = await client.GetAsync("https://localhost:7168/api/TestResults"); //Goes to host and then the url. 
+				}
 
                 httpResponseMessage.EnsureSuccessStatusCode();
 

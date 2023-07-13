@@ -6,9 +6,14 @@
 }
 <h1 class="mt-3">Test Results</h1>
 
-<div class="d-flex justify-content-end">
-	<a class="btn btn-secondary" asp-controller="TestResults" asp-action="Add">Add Test Result</a>
-</div>
+@{
+	if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Teacher"))
+	{
+		<div class="d-flex justify-content-end">
+			<a class="btn btn-secondary" asp-controller="TestResults" asp-action="Add">Add Test Result</a>
+		</div>
+	}
+}
 <div></div>
 
 <table class="table table-bordered">
@@ -41,17 +46,22 @@
 					<td>
 						@result.Notes
 					</td>
-					<td>
-						<nav style="display: flex; justify-content:flex-end">
-							<a class="btn btn-light" asp-controller="TestResults" asp-route-id="@result.Id" asp-action="Edit">Edit</a>
-							<a class="btn btn-danger">
-								@using (Html.BeginForm("Delete", "TestResults", new { id = result.Id }))
-								{
-									<input type="submit" class="bg-transparent border-0" value="Delete" onclick="return confirm('Are you sure you wish to delete the entry:?')" />
-								}
-							</a>
-						</nav>
-					</td>
+					@{
+						if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Teacher"))
+						{
+							<td>
+								<nav style="display: flex; justify-content:flex-end">
+									<a class="btn btn-light" asp-controller="TestResults" asp-route-id="@result.Id" asp-action="Edit">Edit</a>
+									<a class="btn btn-danger">
+										@using (Html.BeginForm("Delete", "TestResults", new { id = result.Id }))
+										{
+											<input type="submit" class="bg-transparent border-0" value="Delete" onclick="return confirm('Are you sure you wish to delete the entry:?')" />
+										}
+									</a>
+								</nav>
+							</td>
+						}
+					}
 				</tr>
 			}
 		}
