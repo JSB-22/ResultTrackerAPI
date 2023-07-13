@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ResultTracker.UI.Models.Dto;
 using System.Net.Http.Headers;
@@ -7,6 +8,7 @@ using System.Text.Json;
 
 namespace ResultTracker.UI.Controllers
 {
+    [Authorize]
     public class TestResultsController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
@@ -15,6 +17,7 @@ namespace ResultTracker.UI.Controllers
         {
             this.httpClientFactory = httpClientFactory;
         }
+        [Authorize(Roles ="Admin,Teacher,Student")]
         public async Task<IActionResult> Index()
         {
             List<TestResultDto> response = new List<TestResultDto>();
@@ -41,7 +44,7 @@ namespace ResultTracker.UI.Controllers
 
             return View(response);
         }
-
+        [Authorize(Roles ="Admin,Teacher")]
         public async Task<IActionResult> Add()
         {
             var client = httpClientFactory.CreateClient();
@@ -73,7 +76,8 @@ namespace ResultTracker.UI.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(AddTestResultViewModel model)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Add(AddTestResultViewModel model)
         {
 			var client = httpClientFactory.CreateClient();
 

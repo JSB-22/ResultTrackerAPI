@@ -53,7 +53,7 @@ namespace ResultTracker.UI.Controllers
 			{
 				var token = await GetJWTTokenStringFromHttpResponse(httpResponseMessage);
 
-				await SignInUser( GetUserRoleFromJWTTokenString(token),token );
+				await SignInUser( GetUserRoleFromJWTTokenString(token),token,GetUserFullNameFromJWTTokenString(token));
 
 				return RedirectToAction("Index","Home");
 			}
@@ -83,13 +83,14 @@ namespace ResultTracker.UI.Controllers
 		#endregion
 
 
-		public async Task SignInUser(string userRole, string userToken)
+		public async Task SignInUser(string userRole, string userToken, string userFullName)
 		{
 			var claims = new List<Claim>
 			{
 				new Claim("RoleClaim", userRole),
 				new Claim("TokenClaim", userToken),
-				new Claim(ClaimTypes.Role,userRole)
+				new Claim(ClaimTypes.Role,userRole),
+				new Claim(ClaimTypes.Name,userFullName)
 			};
 
 			var claimsIdentity = new ClaimsIdentity(
@@ -113,6 +114,20 @@ namespace ResultTracker.UI.Controllers
 			if (tokenS is null) return "";
 			var claim = tokenS.Claims.FirstOrDefault(j => j.Type.EndsWith("/role"));
 			return claim is null ? "" : claim.Value; 
+		}
+
+		public string GetUserFullNameFromJWTTokenString(string tokenString)
+		{
+			//Test: 
+			var handler = new JwtSecurityTokenHandler();
+			var jsonToken = handler.ReadToken(tokenString);
+			var tokenS = jsonToken as JwtSecurityToken;
+			//
+			// Possible need for exception.
+			// 
+			if (tokenS is null) return "";
+			var claim = tokenS.Claims.FirstOrDefault(j => j.Type.EndsWith("/name"));
+			return claim is null ? "" : claim.Value;
 		}
 
 		public async Task<string> GetJWTTokenStringFromHttpResponse(HttpResponseMessage httpResponseMessage)
