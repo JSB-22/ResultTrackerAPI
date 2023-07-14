@@ -59,6 +59,10 @@ namespace ResultTracker.UI.Controllers
 			}
 			//HttpContext.Response.Cookies.Append("token", token, new CookieOptions() {Expires = DateTime.Now.AddMinutes(15)}); (OLD) 
 		}
+		public IActionResult Logout(bool methodOverload = true)
+		{
+			return View();
+		}
 		[HttpPost]
 		public async Task<IActionResult> Logout()
 		{
