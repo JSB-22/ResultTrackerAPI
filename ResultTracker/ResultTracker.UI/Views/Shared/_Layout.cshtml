@@ -36,6 +36,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="TestResults" asp-action="Index">Results</a>
                                 </li>
+                            }
+                        }
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @{
+                            if (this.User.Identity.IsAuthenticated)
+                            {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
                                 </li>
@@ -47,7 +55,6 @@
                                 </li>
                             }
                         }
-
                     </ul>
                 </div>
             </div>
