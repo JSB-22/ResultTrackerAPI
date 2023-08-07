@@ -165,6 +165,8 @@ namespace ResultTracker.UI.Controllers
         }
         public async Task PopulateModel<T>(T inputModel,HttpClient client)
         {
+            //Utilise repsonse obj for clean up. 
+            
             if (inputModel is null) throw new Exception();
 
 			var topicData = await GetTopics(client);
@@ -218,6 +220,7 @@ namespace ResultTracker.UI.Controllers
             {
                 throw new Exception("Cannot handle obbjects of this type.");
             }
+
 		}
         #endregion
         [HttpPost]
