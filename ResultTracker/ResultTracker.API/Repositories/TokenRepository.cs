@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using ResultTracker.API.Repositories.Interfaces;
+using ResultTracker.API.Users.Domain;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -16,9 +17,14 @@ namespace ResultTracker.API.Repositories
 		}
 		public string CreateJWTToken(IdentityUser user, List<string> roles)
 		{
+			var accountUser = (Account)user;
+
 			//Create claims from roles: 
-			var claims = new List<Claim>();
-			claims.Add(new Claim(ClaimTypes.Email, user.Email));
+			var claims = new List<Claim>
+			{
+				new Claim(ClaimTypes.Email, accountUser.Email),
+				new Claim(ClaimTypes.Name, accountUser.FullName)
+			};
 
 			foreach (var role in roles)
 			{

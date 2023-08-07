@@ -1,0 +1,69 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<ResultTracker.UI.Models.Dto.TestResultDto>
+@{
+}
+<h1 class="mt-3">Test Results</h1>
+
+@{
+	if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Teacher"))
+	{
+		<div class="d-flex justify-content-end">
+			<a class="btn btn-secondary" asp-controller="TestResults" asp-action="Add">Add Test Result</a>
+		</div>
+	}
+}
+<div></div>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Student</th>
+			<th>Topic</th>
+			<th>Subject</th>
+			<th>Result (%)</th>
+			<th>Notes</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			foreach (var result in Model)
+			{
+				<tr>
+					<td>
+						@result.Account.StudentName
+					</td>
+					<td>
+						@result.Topic.Name
+					</td>
+					<td>
+						@result.Subject.Name
+					</td>
+					<td>
+						@result.PercentageResult % 
+					</td>
+					<td>
+						@result.Notes
+					</td>
+					@{
+						if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Teacher"))
+						{
+							<td>
+								<nav style="display: flex; justify-content:flex-end">
+									<a class="btn btn-light" asp-controller="TestResults" asp-route-id="@result.Id" asp-action="Edit">Edit</a>
+									<a class="btn btn-danger">
+										@using (Html.BeginForm("Delete", "TestResults", new { id = result.Id }))
+										{
+											<input type="submit" class="bg-transparent border-0" value="Delete" onclick="return confirm('Are you sure you wish to delete the entry:?')" />
+										}
+									</a>
+								</nav>
+							</td>
+						}
+					}
+				</tr>
+			}
+		}
+	</tbody>
+</table>

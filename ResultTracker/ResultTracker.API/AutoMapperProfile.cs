@@ -20,9 +20,11 @@ namespace ResultTracker.API
             CreateMap<AddTestResultRequestDto, TestResult>().ReverseMap();
             CreateMap<UpdateTestResultRequestDto, TestResult>().ReverseMap();
 
-            CreateMap<AccountDto,Account>().ReverseMap()
-                .ForMember(dest=>dest.StudentName,opt=>opt.MapFrom(src=>src.FullName))
-                .ForMember(dest=>dest.TeacherName,opt=>opt.MapFrom(src=>src.Teacher.FullName));
+            CreateMap<AccountDto, Account>().ReverseMap()
+                .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher.FullName))
+                .ForMember(dest=>dest.StudentId,opt=>opt.MapFrom(src=>src.Id))
+                .ForMember(dest=>dest.TeacherId,opt=>opt.MapFrom(src=>src.Teacher.Id));
         }
     }
 }

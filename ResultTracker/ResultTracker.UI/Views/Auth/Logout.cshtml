@@ -1,0 +1,25 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="text-center">
+    <h1 class="display-4">Logout</h1>
+    @{
+        if (this.User.Identity.IsAuthenticated)
+        {
+            var userName = Context.User.Identity.Name;
+            string userNameString = "";
+            userNameString = userName is null ? "" : userName;
+            <p>Logging out alread @userNameString? See you soon!</p>
+        }
+    }
+</div>
+
+<form method="post">
+	<div class="mt-3 d-flex align-content-center">
+		<button type="submit" asp-controller="Auth" asp-route-id="" asp-action="Logout" class="btn btn-danger">Logout</button>
+	</div>
+</form>
+

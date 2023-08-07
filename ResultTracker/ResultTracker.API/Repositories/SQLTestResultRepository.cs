@@ -78,7 +78,7 @@ namespace ResultTracker.API.Repositories
 
 		public async Task<TestResult?> GetByIdAsync(Guid id)
 		{
-			return await _context.Results.Include(r => r.Subject).Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == id);
+			return await _context.Results.Include(r => r.Subject).Include(r => r.Topic).Include(r=>r.Student).FirstOrDefaultAsync(r => r.Id == id);
 		}
 
 		public async Task<TestResult?> UpdateAsync(Guid id, TestResult result)

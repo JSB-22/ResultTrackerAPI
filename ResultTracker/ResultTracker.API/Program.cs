@@ -50,6 +50,7 @@ namespace ResultTracker.API
 			builder.Services.AddScoped<ITopicRepository, SQLTopicRepository>();
 			builder.Services.AddScoped<ISubjectRepository, SQLSubjectRepository>();
 			builder.Services.AddScoped<ITestResultRepository, SQLTestResultRepository>();
+			builder.Services.AddScoped<IAccountRepository, SQLAccountRepository>();
 			builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 			#region Authentication:
