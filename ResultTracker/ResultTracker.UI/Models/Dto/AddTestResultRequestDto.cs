@@ -6,7 +6,9 @@ namespace ResultTracker.UI.Models.Dto
 	{
 		[StringLength(100)]
 		public string? Notes { get; set; }
-		[Required(ErrorMessage = "A grade is required")]
+        [Range(0, 100)]
+		[Display(Name = "Result %")]
+        [Required(ErrorMessage = "A grade is required")]
 		public int PercentageResult { get; set; }
 		[Required(ErrorMessage = "A Topic must be assigned")]
 		public Guid TopicId { get; set; }
