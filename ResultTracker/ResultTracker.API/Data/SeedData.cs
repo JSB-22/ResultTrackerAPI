@@ -91,7 +91,7 @@ namespace ResultTracker.API.Data
 				.GetAwaiter()
 				.GetResult();
 			userManager
-				.CreateAsync(danyal, "Password1!")
+				.CreateAsync(danyal, "password")
 				.GetAwaiter()
 				.GetResult();
 			userManager

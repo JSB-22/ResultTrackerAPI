@@ -369,7 +369,7 @@ namespace ResultTracker.API.Migrations
             modelBuilder.Entity("ResultTracker.API.Models.Domain.TestResult", b =>
                 {
                     b.HasOne("ResultTracker.API.Users.Domain.Account", "Student")
-                        .WithMany()
+                        .WithMany("Results")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -400,6 +400,11 @@ namespace ResultTracker.API.Migrations
                         .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ResultTracker.API.Users.Domain.Account", b =>
+                {
+                    b.Navigation("Results");
                 });
 #pragma warning restore 612, 618
         }

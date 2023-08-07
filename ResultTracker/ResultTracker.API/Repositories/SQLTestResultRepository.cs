@@ -45,6 +45,10 @@ namespace ResultTracker.API.Repositories
 				{
 					testResults = testResults.Where(tr => tr.Student.Teacher.FullName.ToLower().Contains(filterQuery.ToLower()));
 				}
+				else if (filterOn.Equals("Student", StringComparison.OrdinalIgnoreCase))
+				{
+					testResults = testResults.Where(tr => tr.Student.FullName.ToLower().Contains(filterQuery.ToLower()));
+				}
 				else
 				{
 					testResults = testResults.Where(tr => tr.Subject.Name.ToLower().Contains(filterQuery.ToLower()));
@@ -74,7 +78,7 @@ namespace ResultTracker.API.Repositories
 
 		public async Task<TestResult?> GetByIdAsync(Guid id)
 		{
-			return await _context.Results.Include(r => r.Subject).Include(r => r.Topic).FirstOrDefaultAsync(r => r.Id == id);
+			return await _context.Results.Include(r => r.Subject).Include(r => r.Topic).Include(r=>r.Student).FirstOrDefaultAsync(r => r.Id == id);
 		}
 
 		public async Task<TestResult?> UpdateAsync(Guid id, TestResult result)
